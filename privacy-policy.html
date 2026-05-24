@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de Privacidade — Alpha Organizer Ops</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #0a0c10;
+      --surface:   #111318;
+      --border:    #1e2330;
+      --accent:    #4f8ef7;
+      --accent2:   #7b5ea7;
+      --text:      #e4e8f0;
+      --muted:     #6b748a;
+      --heading:   #ffffff;
+      --tag-bg:    #161b27;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* ── Noise texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: .5;
+    }
+
+    /* ── Layout ── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 60px 0 48px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 52px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .badge svg { flex-shrink: 0; }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 700;
+      color: var(--heading);
+      line-height: 1.2;
+      letter-spacing: -.02em;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .subtitle span { display: flex; align-items: center; gap: 6px; }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 52px;
+    }
+
+    .toc-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .toc ol {
+      list-style: none;
+      counter-reset: toc;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 24px;
+    }
+
+    @media (max-width: 520px) { .toc ol { grid-template-columns: 1fr; } }
+
+    .toc li { counter-increment: toc; }
+
+    .toc a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13.5px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      transition: color .15s;
+    }
+
+    .toc a::before {
+      content: counter(toc, decimal-leading-zero);
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .toc a:hover { color: var(--accent); }
+
+    /* ── Sections ── */
+    section {
+      margin-bottom: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp .4s ease both;
+    }
+
+    section:last-of-type { border-bottom: none; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-number {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 18px;
+      letter-spacing: -.01em;
+    }
+
+    p { margin-bottom: 14px; color: var(--text); }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── Data cards ── */
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .data-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .data-card .icon {
+      font-size: 20px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .data-card strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 4px;
+    }
+
+    .data-card p {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* ── Highlight box ── */
+    .highlight {
+      background: linear-gradient(135deg, rgba(79,142,247,.08), rgba(123,94,167,.08));
+      border: 1px solid rgba(79,142,247,.25);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .highlight strong { color: var(--accent); }
+
+    /* ── Info list ── */
+    ul.info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    ul.info-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+    }
+
+    ul.info-list li::before {
+      content: '→';
+      color: var(--accent);
+      font-family: 'DM Mono', monospace;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Permissions table ── */
+    .perm-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13.5px;
+    }
+
+    .perm-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .perm-table td {
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    .perm-table tr:hover td { background: var(--surface); }
+
+    .perm-tag {
+      display: inline-block;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11.5px;
+      color: var(--accent);
+    }
+
+    /* ── Contact ── */
+    .contact-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .contact-box .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .contact-box strong { display: block; color: var(--heading); font-size: 15px; margin-bottom: 4px; }
+    .contact-box a { color: var(--accent); text-decoration: none; font-size: 13.5px; }
+    .contact-box a:hover { text-decoration: underline; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 60px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="badge">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 3v3.5l2 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Documento Legal
+    </div>
+    <h1>Política de Privacidade<br>Alpha Organizer Ops</h1>
+    <div class="subtitle">
+      <span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 1v2M10 1v2M1 5h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Última atualização: 24 de maio de 2025
+      </span>
+      <span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3.5l2 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Versão 4.4.23
+      </span>
+    </div>
+  </header>
+
+  <!-- ── TOC ── -->
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-title">Conteúdo</div>
+    <ol>
+      <li><a href="#sec1">Quem somos</a></li>
+      <li><a href="#sec2">Dados coletados</a></li>
+      <li><a href="#sec3">Como usamos os dados</a></li>
+      <li><a href="#sec4">Armazenamento</a></li>
+      <li><a href="#sec5">Compartilhamento</a></li>
+      <li><a href="#sec6">Permissões da extensão</a></li>
+      <li><a href="#sec7">Segurança</a></li>
+      <li><a href="#sec8">Seus direitos (LGPD)</a></li>
+      <li><a href="#sec9">Menores de idade</a></li>
+      <li><a href="#sec10">Alterações</a></li>
+      <li><a href="#sec11">Contato</a></li>
+    </ol>
+  </nav>
+
+  <!-- ── 1. QUEM SOMOS ── -->
+  <section id="sec1">
+    <span class="section-number">01</span>
+    <h2>Quem somos</h2>
+    <p>
+      O <strong>Alpha Organizer Ops</strong> é uma extensão para o Google Chrome desenvolvida pela
+      <strong>Assessoria Alpha</strong>, destinada exclusivamente a uso interno pela equipe operacional
+      para gerenciar grupos de clientes no WhatsApp Web.
+    </p>
+    <p>
+      Esta Política de Privacidade descreve como coletamos, usamos, armazenamos e protegemos
+      os dados tratados pela extensão, em conformidade com a
+      <strong>Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)</strong> e
+      com as políticas de desenvolvedor do Google Chrome Web Store.
+    </p>
+  </section>
+
+  <!-- ── 2. DADOS COLETADOS ── -->
+  <section id="sec2">
+    <span class="section-number">02</span>
+    <h2>Dados coletados</h2>
+    <p>A extensão coleta e processa as seguintes categorias de dados:</p>
+
+    <div class="data-grid">
+      <div class="data-card">
+        <span class="icon">💬</span>
+        <strong>Mensagens do WhatsApp Web</strong>
+        <p>Textos de conversas lidas nos grupos acessados pelo usuário autenticado, para análise e categorização operacional.</p>
+      </div>
+      <div class="data-card">
+        <span class="icon">🏷️</span>
+        <strong>Dados de clientes</strong>
+        <p>Status, fase de contrato, saúde do cliente (health score), datas de renovação e anotações operacionais.</p>
+      </div>
+      <div class="data-card">
+        <span class="icon">🔑</span>
+        <strong>Credenciais de acesso</strong>
+        <p>Logins e senhas de plataformas externas (Meta Ads, Instagram, iFood, sistema de cardápio) inseridos manualmente pelo operador.</p>
+      </div>
+      <div class="data-card">
+        <span class="icon">📊</span>
+        <strong>Dados de desempenho (Meta)</strong>
+        <p>Saldo e informações de contas do Meta Ads obtidos via API, com token fornecido pelo operador.</p>
+      </div>
+      <div class="data-card">
+        <span class="icon">🤖</span>
+        <strong>Análises de IA</strong>
+        <p>Capturas de mensagens enviadas à API da Anthropic (Claude) para geração de resumos e insights automáticos.</p>
+      </div>
+      <div class="data-card">
+        <span class="icon">⚙️</span>
+        <strong>Configurações</strong>
+        <p>Preferências da extensão, chaves de API configuradas pelo operador e configurações do Firebase.</p>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Importante:</strong> A extensão <strong>não coleta dados de usuários finais</strong> (clientes dos franqueados).
+      Os dados tratados referem-se exclusivamente a informações operacionais gerenciadas
+      pelos membros internos da equipe Alpha.
+    </div>
+  </section>
+
+  <!-- ── 3. COMO USAMOS ── -->
+  <section id="sec3">
+    <span class="section-number">03</span>
+    <h2>Como usamos os dados</h2>
+    <p>Os dados são utilizados exclusivamente para as seguintes finalidades:</p>
+    <ul class="info-list">
+      <li>Organizar e categorizar grupos de clientes no WhatsApp Web</li>
+      <li>Registrar e acompanhar ações, tarefas e histórico operacional por cliente</li>
+      <li>Monitorar métricas de saúde do cliente (health score, satisfação, fase)</li>
+      <li>Gerar análises automáticas de conversas via IA (Claude / Anthropic)</li>
+      <li>Consultar saldo de campanhas do Meta Ads em tempo real</li>
+      <li>Sincronizar dados operacionais entre dispositivos via Firebase Firestore</li>
+      <li>Autenticar operadores com controle de sessão e limite de tentativas</li>
+    </ul>
+  </section>
+
+  <!-- ── 4. ARMAZENAMENTO ── -->
+  <section id="sec4">
+    <span class="section-number">04</span>
+    <h2>Armazenamento dos dados</h2>
+    <p>Os dados são armazenados em dois ambientes:</p>
+
+    <ul class="info-list">
+      <li>
+        <strong>Localmente no navegador</strong> (chrome.storage.local): registros operacionais,
+        capturas de IA, configurações e sessão de autenticação. Esses dados permanecem
+        no dispositivo do operador e não são transmitidos automaticamente a terceiros.
+      </li>
+      <li>
+        <strong>Firebase Firestore (Google Cloud)</strong>: dados operacionais sincronizados
+        entre membros da equipe, hospedados no projeto <code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)">alpha-organizer-ops</code>
+        sob infraestrutura da Google com criptografia em trânsito (TLS) e em repouso.
+      </li>
+    </ul>
+
+    <div class="highlight">
+      Os dados armazenados no Firebase estão sujeitos à
+      <strong>Política de Privacidade do Google</strong>
+      (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--accent)">policies.google.com/privacy</a>).
+      Nenhum dado é transferido para servidores próprios da Assessoria Alpha além do Firebase configurado.
+    </div>
+  </section>
+
+  <!-- ── 5. COMPARTILHAMENTO ── -->
+  <section id="sec5">
+    <span class="section-number">05</span>
+    <h2>Compartilhamento com terceiros</h2>
+    <p>
+      A extensão integra-se com os seguintes serviços externos. Dados são enviados a eles
+      apenas quando o operador utiliza a funcionalidade correspondente:
+    </p>
+
+    <ul class="info-list">
+      <li>
+        <strong>Anthropic (Claude API)</strong> — trechos de mensagens do WhatsApp são enviados
+        para geração de análises e resumos. Aplicam-se os
+        <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener" style="color:var(--accent)">Termos de Uso da Anthropic</a>.
+      </li>
+      <li>
+        <strong>Meta / Facebook Graph API</strong> — o token do operador é utilizado para
+        consultar saldo de conta de anúncios. Nenhum dado é armazenado além do cache temporário.
+      </li>
+      <li>
+        <strong>Google Firebase</strong> — sincronização de dados entre operadores autorizados
+        da mesma equipe Alpha.
+      </li>
+    </ul>
+
+    <p>
+      <strong>Não vendemos, alugamos nem compartilhamos dados com quaisquer outras empresas
+      ou serviços fora dos listados acima.</strong>
+    </p>
+  </section>
+
+  <!-- ── 6. PERMISSÕES ── -->
+  <section id="sec6">
+    <span class="section-number">06</span>
+    <h2>Permissões da extensão</h2>
+    <p>A extensão solicita as seguintes permissões do Chrome:</p>
+
+    <table class="perm-table">
+      <thead>
+        <tr>
+          <th>Permissão</th>
+          <th>Finalidade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="perm-tag">storage</span></td>
+          <td>Salvar registros operacionais, capturas de IA e configurações localmente no navegador.</td>
+        </tr>
+        <tr>
+          <td><span class="perm-tag">tabs</span></td>
+          <td>Detectar quando o usuário está na aba do WhatsApp Web para ativar o painel operacional.</td>
+        </tr>
+        <tr>
+          <td><span class="perm-tag">https://web.whatsapp.com/*</span></td>
+          <td>Injetar o painel de gestão e capturar mensagens dos grupos ativos no WhatsApp Web.</td>
+        </tr>
+        <tr>
+          <td><span class="perm-tag">*.googleapis.com</span> / <span class="perm-tag">*.firebaseio.com</span></td>
+          <td>Comunicação com o Firebase (Firestore e Authentication) para sincronização e autenticação.</td>
+        </tr>
+        <tr>
+          <td><span class="perm-tag">api.anthropic.com</span></td>
+          <td>Enviar mensagens selecionadas para análise de IA (Claude) quando a funcionalidade estiver habilitada.</td>
+        </tr>
+        <tr>
+          <td><span class="perm-tag">graph.facebook.com</span></td>
+          <td>Consultar saldo de conta Meta Ads com o token fornecido pelo operador.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── 7. SEGURANÇA ── -->
+  <section id="sec7">
+    <span class="section-number">07</span>
+    <h2>Segurança</h2>
+    <p>Adotamos as seguintes medidas de segurança:</p>
+    <ul class="info-list">
+      <li>Autenticação por senha com bloqueio automático após 5 tentativas incorretas (lockout de 5 minutos)</li>
+      <li>Sessões com tempo de expiração de 8 horas</li>
+      <li>Comunicação com APIs externas exclusivamente via HTTPS/TLS</li>
+      <li>Chaves de API armazenadas apenas no <code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)">chrome.storage.local</code> do dispositivo do operador</li>
+      <li>Dados no Firebase protegidos por regras de segurança do Firestore</li>
+    </ul>
+  </section>
+
+  <!-- ── 8. LGPD ── -->
+  <section id="sec8">
+    <span class="section-number">08</span>
+    <h2>Seus direitos (LGPD)</h2>
+    <p>
+      Nos termos da Lei Geral de Proteção de Dados, os titulares têm os seguintes direitos:
+    </p>
+    <ul class="info-list">
+      <li>Confirmar a existência de tratamento de dados pessoais</li>
+      <li>Acessar os dados armazenados sobre si</li>
+      <li>Corrigir dados incompletos, inexatos ou desatualizados</li>
+      <li>Solicitar a anonimização, bloqueio ou eliminação de dados desnecessários</li>
+      <li>Solicitar a portabilidade dos dados a outro fornecedor</li>
+      <li>Revogar o consentimento a qualquer momento</li>
+    </ul>
+    <p>
+      Para exercer esses direitos, entre em contato pelo canal indicado na seção de contato abaixo.
+    </p>
+  </section>
+
+  <!-- ── 9. MENORES ── -->
+  <section id="sec9">
+    <span class="section-number">09</span>
+    <h2>Menores de idade</h2>
+    <p>
+      Esta extensão é destinada exclusivamente ao uso profissional por membros adultos
+      da equipe interna da Assessoria Alpha. <strong>Não coletamos intencionalmente
+      dados de menores de 18 anos.</strong>
+    </p>
+  </section>
+
+  <!-- ── 10. ALTERAÇÕES ── -->
+  <section id="sec10">
+    <span class="section-number">10</span>
+    <h2>Alterações nesta política</h2>
+    <p>
+      Reservamo-nos o direito de atualizar esta política a qualquer momento.
+      Alterações relevantes serão comunicadas via atualização da extensão na Chrome Web Store
+      ou por canais internos da equipe Alpha.
+    </p>
+    <p>
+      A data de "última atualização" no topo desta página indica quando a versão vigente
+      foi publicada. O uso continuado da extensão após alterações implica aceitação da nova política.
+    </p>
+  </section>
+
+  <!-- ── 11. CONTATO ── -->
+  <section id="sec11">
+    <span class="section-number">11</span>
+    <h2>Contato</h2>
+    <p>
+      Dúvidas, solicitações relacionadas a dados pessoais ou relatos de incidentes de segurança
+      devem ser enviados ao responsável pela extensão:
+    </p>
+
+    <div class="contact-box">
+      <div class="avatar">α</div>
+      <div>
+        <strong>Assessoria Alpha — Responsável pela Extensão</strong>
+        <a href="mailto:privacidade@assessoriaalpha.com.br">privacidade@assessoriaalpha.com.br</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Assessoria Alpha · Alpha Organizer Ops v4.4.23</p>
+    <p style="margin-top:6px">Este documento é válido para fins de publicação na Chrome Web Store.</p>
+  </footer>
+
+</div>
+</body>
+</html>
